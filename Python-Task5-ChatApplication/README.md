@@ -1,24 +1,24 @@
 # Chat Application
 
-A real-time multi-client chat application built using Python socket programming and threading as part of the Oasis Infobyte Python Programming Internship.
+A real-time multi-client chat application built using Python socket programming and threading as part of the **Oasis Infobyte Python Programming Internship**.
 
 ## Features
 
-* Real-time communication between multiple clients
-* Client-server architecture
-* Multiple users can connect simultaneously
-* Username support
-* Timestamped messages
-* Join and leave notifications
-* `/quit` command to leave the chat
-* Multithreading for handling multiple clients
-* Connection error handling
+- Real-time communication between multiple clients
+- Client-server architecture
+- Multiple users can connect simultaneously
+- Username support
+- Timestamped messages
+- Join and leave notifications
+- `/quit` command to leave the chat
+- Multithreading for handling multiple clients
+- Connection error handling
 
 ## Technologies Used
 
-* Python
-* Socket Programming
-* Threading
+- Python
+- Socket Programming
+- Threading
 
 ## Project Structure
 
@@ -26,7 +26,10 @@ A real-time multi-client chat application built using Python socket programming 
 Python-Task5-ChatApplication/
 ├── server.py
 ├── client.py
-└── README.md
+├── README.md
+├── chat-server.png
+├── chat-kiran.png
+└── chat-arch.png
 ```
 
 ## How to Run
@@ -61,8 +64,20 @@ Type:
 /quit
 ```
 
+to leave the chat.
+
+## How It Works
+
+The application uses a **client-server architecture**.
+
+- The server listens for incoming client connections.
+- Each connected client is handled using a separate thread.
+- Messages are broadcast to the connected clients.
+- Usernames and timestamps are displayed with chat messages.
+- Clients can leave the chat using the `/quit` command.
+
 ## Internship
 
-**Organization:** Oasis Infobyte
-**Track:** Python Programming
+**Organization:** Oasis Infobyte  
+**Track:** Python Programming  
 **Task:** Chat Application

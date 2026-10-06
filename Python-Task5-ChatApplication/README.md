@@ -1,4 +1,4 @@
-# Chat Application
+ # Chat Application
 
 A real-time multi-client chat application built using Python socket programming and threading as part of the **Oasis Infobyte Python Programming Internship**.
 
@@ -72,7 +72,7 @@ The application uses a **client-server architecture**.
 
 - The server listens for incoming client connections.
 - Each connected client is handled using a separate thread.
-- Messages are broadcast to the connected clients.
+- Messages are broadcast to connected clients.
 - Usernames and timestamps are displayed with chat messages.
 - Clients can leave the chat using the `/quit` command.
 

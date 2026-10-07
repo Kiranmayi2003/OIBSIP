@@ -1,130 +1,203 @@
-
 const display = document.getElementById("display");
-const buttons = document.querySelectorAll(".calc-btn");
+
+const numberButtons = document.querySelectorAll(".number");
+const operatorButtons = document.querySelectorAll(".operator");
+
+const clearButton = document.getElementById("clear");
+const backspaceButton = document.getElementById("backspace");
+const decimalButton = document.getElementById("decimal");
+const equalsButton = document.getElementById("equals");
 
 let firstNumber = null;
-let operator = null;
+let currentOperator = null;
 let waitingForSecondNumber = false;
 
-buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-        const value = button.textContent;
 
-        // Clear
-        if (value === "C") {
-            display.value = "";
+// Number buttons
+numberButtons.forEach(function (button) {
+
+    button.addEventListener("click", function () {
+
+        const number = button.textContent;
+
+        if (display.value === "Error") {
+            display.value = number;
             firstNumber = null;
-            operator = null;
+            currentOperator = null;
             waitingForSecondNumber = false;
             return;
         }
 
-        // Backspace
-        if (value === "⌫") {
-            display.value = display.value.slice(0, -1);
-            return;
-        }
-
-        // Number or decimal
-        if (!isNaN(value) || value === ".") {
-            if (display.value === "Error" || waitingForSecondNumber) {
-                display.value = "";
-                waitingForSecondNumber = false;
-            }
-
-            // Prevent multiple decimal points
-            if (value === "." && display.value.includes(".")) {
-                return;
-            }
-
-            display.value += value;
-            return;
-        }
-
-        // Percentage
-        if (value === "%") {
-            const number = parseFloat(display.value);
-
-            if (isNaN(number)) {
-                display.value = "Error";
-            } else {
-                display.value = number / 100;
-            }
-
-            return;
-        }
-
-        // Operator
-        if (["+", "-", "×", "÷"].includes(value)) {
-            const number = parseFloat(display.value);
-
-            if (isNaN(number)) {
-                return;
-            }
-
-            if (firstNumber !== null && operator !== null) {
-                calculate(number);
-            } else {
-                firstNumber = number;
-            }
-
-            operator = value;
-            waitingForSecondNumber = true;
-            return;
-        }
-
-        // Equals
-        if (value === "=") {
-            const secondNumber = parseFloat(display.value);
-
-            if (
-                firstNumber === null ||
-                operator === null ||
-                isNaN(secondNumber)
-            ) {
-                return;
-            }
-
-            calculate(secondNumber);
-
-            operator = null;
-            firstNumber = null;
-            waitingForSecondNumber = true;
+        if (waitingForSecondNumber) {
+            display.value = number;
+            waitingForSecondNumber = false;
+        } 
+        else if (display.value === "0") {
+            display.value = number;
+        } 
+        else {
+            display.value += number;
         }
     });
+
 });
 
 
-function calculate(secondNumber) {
-    let result;
+// Decimal button
+decimalButton.addEventListener("click", function () {
 
-    if (operator === "+") {
-        result = firstNumber + secondNumber;
+    if (display.value === "Error") {
+        display.value = "0.";
+        return;
     }
 
-    else if (operator === "-") {
-        result = firstNumber - secondNumber;
+    if (waitingForSecondNumber) {
+        display.value = "0.";
+        waitingForSecondNumber = false;
+        return;
     }
 
-    else if (operator === "×") {
-        result = firstNumber * secondNumber;
+    if (!display.value.includes(".")) {
+        display.value += ".";
     }
 
-    else if (operator === "÷") {
-        if (secondNumber === 0) {
-            display.value = "Error";
-            firstNumber = null;
-            operator = null;
+});
+
+
+// Operator buttons
+operatorButtons.forEach(function (button) {
+
+    button.addEventListener("click", function () {
+
+        const operator = button.dataset.operator;
+        const currentNumber = parseFloat(display.value);
+
+        if (display.value === "Error") {
             return;
         }
 
-        result = firstNumber / secondNumber;
+        // If user presses another operator
+        if (currentOperator !== null && waitingForSecondNumber) {
+            currentOperator = operator;
+            return;
+        }
+
+        // First number
+        if (firstNumber === null) {
+            firstNumber = currentNumber;
+        } 
+        else if (currentOperator !== null) {
+
+            const result = calculate(
+                firstNumber,
+                currentNumber,
+                currentOperator
+            );
+
+            if (result === "Error") {
+                display.value = "Error";
+                firstNumber = null;
+                currentOperator = null;
+                return;
+            }
+
+            display.value = result;
+            firstNumber = result;
+        }
+
+        currentOperator = operator;
+        waitingForSecondNumber = true;
+    });
+
+});
+
+
+// Equals button
+equalsButton.addEventListener("click", function () {
+
+    if (
+        firstNumber === null ||
+        currentOperator === null ||
+        waitingForSecondNumber
+    ) {
+        return;
     }
 
-    if (!Number.isFinite(result)) {
+    const secondNumber = parseFloat(display.value);
+
+    const result = calculate(
+        firstNumber,
+        secondNumber,
+        currentOperator
+    );
+
+    if (result === "Error") {
         display.value = "Error";
-    } else {
+    } 
+    else {
         display.value = result;
-        firstNumber = result;
+    }
+
+    firstNumber = null;
+    currentOperator = null;
+    waitingForSecondNumber = false;
+});
+
+
+// Clear button
+clearButton.addEventListener("click", function () {
+
+    display.value = "0";
+    firstNumber = null;
+    currentOperator = null;
+    waitingForSecondNumber = false;
+
+});
+
+
+// Backspace button
+backspaceButton.addEventListener("click", function () {
+
+    if (display.value === "Error") {
+        display.value = "0";
+        return;
+    }
+
+    if (waitingForSecondNumber) {
+        return;
+    }
+
+    if (display.value.length === 1) {
+        display.value = "0";
+    } 
+    else {
+        display.value = display.value.slice(0, -1);
+    }
+
+});
+
+
+// Calculation logic
+function calculate(first, second, operator) {
+
+    switch (operator) {
+
+        case "+":
+            return first + second;
+
+        case "-":
+            return first - second;
+
+        case "*":
+            return first * second;
+
+        case "/":
+            if (second === 0) {
+                return "Error";
+            }
+            return first / second;
+
+        default:
+            return second;
     }
 }

@@ -12,13 +12,10 @@ const welcomeMessage = document.getElementById("welcomeMessage");
 
 const logoutBtn = document.getElementById("logoutBtn");
 
-const toggleButtons =
-    document.querySelectorAll(".toggle-password");
+const toggleButtons = document.querySelectorAll(".toggle-password");
 
 
-/* =========================
-   SHOW REGISTER
-========================= */
+/* SHOW REGISTER */
 
 showRegister.addEventListener("click", () => {
 
@@ -30,12 +27,11 @@ showRegister.addEventListener("click", () => {
     registerForm.classList.remove("hidden");
 
     clearMessages();
+
 });
 
 
-/* =========================
-   SHOW LOGIN
-========================= */
+/* SHOW LOGIN */
 
 showLogin.addEventListener("click", () => {
 
@@ -47,14 +43,34 @@ showLogin.addEventListener("click", () => {
         .classList.remove("hidden");
 
     clearMessages();
+
 });
 
 
-/* =========================
-   REGISTER
-========================= */
+/* PASSWORD HASHING */
 
-registerForm.addEventListener("submit", (event) => {
+async function hashPassword(password) {
+
+    const encoder = new TextEncoder();
+
+    const data = encoder.encode(password);
+
+    const hashBuffer =
+        await crypto.subtle.digest("SHA-256", data);
+
+    const hashArray =
+        Array.from(new Uint8Array(hashBuffer));
+
+    return hashArray
+        .map(byte => byte.toString(16).padStart(2, "0"))
+        .join("");
+
+}
+
+
+/* REGISTER */
+
+registerForm.addEventListener("submit", async (event) => {
 
     event.preventDefault();
 
@@ -76,11 +92,35 @@ registerForm.addEventListener("submit", (event) => {
             .value;
 
 
-    if (password.length < 6) {
+    if (!name || !email || !password || !confirmPassword) {
 
         showMessage(
             registerMessage,
-            "Password must contain at least 6 characters.",
+            "Please fill in all fields.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (password.length < 8) {
+
+        showMessage(
+            registerMessage,
+            "Password must contain at least 8 characters.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!/[0-9]/.test(password)) {
+
+        showMessage(
+            registerMessage,
+            "Password must contain at least 1 number.",
             "error"
         );
 
@@ -101,9 +141,7 @@ registerForm.addEventListener("submit", (event) => {
 
 
     const users =
-        JSON.parse(
-            localStorage.getItem("users")
-        ) || [];
+        JSON.parse(localStorage.getItem("users")) || [];
 
 
     const existingUser =
@@ -122,14 +160,23 @@ registerForm.addEventListener("submit", (event) => {
     }
 
 
+    const hashedPassword =
+        await hashPassword(password);
+
+
     const newUser = {
+
         name: name,
+
         email: email,
-        password: password
+
+        password: hashedPassword
+
     };
 
 
     users.push(newUser);
+
 
     localStorage.setItem(
         "users",
@@ -159,14 +206,13 @@ registerForm.addEventListener("submit", (event) => {
         clearMessages();
 
     }, 1000);
+
 });
 
 
-/* =========================
-   LOGIN
-========================= */
+/* LOGIN */
 
-loginForm.addEventListener("submit", (event) => {
+loginForm.addEventListener("submit", async (event) => {
 
     event.preventDefault();
 
@@ -180,17 +226,31 @@ loginForm.addEventListener("submit", (event) => {
             .value;
 
 
+    if (!email || !password) {
+
+        showMessage(
+            loginMessage,
+            "Please enter your email and password.",
+            "error"
+        );
+
+        return;
+    }
+
+
     const users =
-        JSON.parse(
-            localStorage.getItem("users")
-        ) || [];
+        JSON.parse(localStorage.getItem("users")) || [];
+
+
+    const hashedPassword =
+        await hashPassword(password);
 
 
     const user =
         users.find(
             user =>
                 user.email === email &&
-                user.password === password
+                user.password === hashedPassword
         );
 
 
@@ -206,13 +266,21 @@ loginForm.addEventListener("submit", (event) => {
     }
 
 
+    localStorage.setItem(
+        "loggedInUser",
+        JSON.stringify({
+            name: user.name,
+            email: user.email
+        })
+    );
+
+
     showDashboard(user);
+
 });
 
 
-/* =========================
-   DASHBOARD
-========================= */
+/* DASHBOARD */
 
 function showDashboard(user) {
 
@@ -227,14 +295,34 @@ function showDashboard(user) {
 
     welcomeMessage.textContent =
         `Welcome, ${user.name}! You are successfully logged in.`;
+
 }
 
 
-/* =========================
-   LOGOUT
-========================= */
+/* CHECK LOGIN SESSION */
+
+function checkSession() {
+
+    const loggedInUser =
+        JSON.parse(
+            localStorage.getItem("loggedInUser")
+        );
+
+
+    if (loggedInUser) {
+
+        showDashboard(loggedInUser);
+
+    }
+
+}
+
+
+/* LOGOUT */
 
 logoutBtn.addEventListener("click", () => {
+
+    localStorage.removeItem("loggedInUser");
 
     dashboard.classList.add("hidden");
 
@@ -246,12 +334,11 @@ logoutBtn.addEventListener("click", () => {
     loginForm.reset();
 
     clearMessages();
+
 });
 
 
-/* =========================
-   SHOW / HIDE PASSWORD
-========================= */
+/* SHOW / HIDE PASSWORD */
 
 toggleButtons.forEach(button => {
 
@@ -274,14 +361,15 @@ toggleButtons.forEach(button => {
             input.type = "password";
 
             button.textContent = "Show";
+
         }
+
     });
+
 });
 
 
-/* =========================
-   MESSAGE
-========================= */
+/* MESSAGE */
 
 function showMessage(element, message, type) {
 
@@ -289,6 +377,7 @@ function showMessage(element, message, type) {
 
     element.className =
         `message ${type}`;
+
 }
 
 
@@ -301,4 +390,10 @@ function clearMessages() {
     loginMessage.className = "message";
 
     registerMessage.className = "message";
+
 }
+
+
+/* CHECK SESSION ON PAGE LOAD */
+
+checkSession();s

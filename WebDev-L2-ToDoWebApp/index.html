@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,52 +35,59 @@
                 autocomplete="off"
             >
 
-            <button id="addBtn">
-                Add Task
-            </button>
+            <button id="addBtn">Add Task</button>
 
         </section>
 
 
-        <section class="controls">
+        <!-- Pending Tasks -->
 
-            <div class="task-count">
-                <span id="taskCount">0</span> tasks
+        <section class="task-section">
+
+            <div class="section-header">
+                <h2>Pending Tasks</h2>
+
+                <span class="count pending-count">
+                    <span id="pendingCount">0</span> pending
+                </span>
             </div>
 
-            <div class="filters">
+            <ul id="pendingList"></ul>
 
-                <button class="filter active" data-filter="all">
-                    All
-                </button>
+            <div id="pendingEmpty" class="empty-state">
+                <div class="empty-icon">✓</div>
 
-                <button class="filter" data-filter="active">
-                    Active
-                </button>
+                <h3>No pending tasks</h3>
 
-                <button class="filter" data-filter="completed">
-                    Completed
-                </button>
-
+                <p>You're all caught up!</p>
             </div>
 
         </section>
 
 
-        <ul id="taskList"></ul>
+        <!-- Completed Tasks -->
 
+        <section class="task-section completed-section">
 
-        <div id="emptyState" class="empty-state">
+            <div class="section-header">
+                <h2>Completed Tasks</h2>
 
-            <div class="empty-icon">✓</div>
+                <span class="count completed-count">
+                    <span id="completedCount">0</span> completed
+                </span>
+            </div>
 
-            <h2>No tasks yet</h2>
+            <ul id="completedList"></ul>
 
-            <p>
-                Add a task above and start getting things done.
-            </p>
+            <div id="completedEmpty" class="empty-state">
+                <div class="empty-icon">✓</div>
 
-        </div>
+                <h3>No completed tasks</h3>
+
+                <p>Completed tasks will appear here.</p>
+            </div>
+
+        </section>
 
 
         <button id="clearCompleted" class="clear-btn">
@@ -94,3 +102,4 @@
 </body>
 
 </html>
+```

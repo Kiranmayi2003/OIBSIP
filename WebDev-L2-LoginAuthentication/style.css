@@ -15,13 +15,12 @@ body {
 
     font-family: Arial, sans-serif;
 
-    background:
-        linear-gradient(
-            135deg,
-            #eef2ff,
-            #e0e7ff,
-            #f0fdfa
-        );
+    background: linear-gradient(
+        135deg,
+        #eef2ff,
+        #e0e7ff,
+        #f0fdfa
+    );
 
     color: #1f2937;
 }

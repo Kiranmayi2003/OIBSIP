@@ -1,43 +1,67 @@
-# Tribute Page — Dr. A. P. J. Abdul Kalam
+# Dr. A. P. J. Abdul Kalam — Tribute Page
 
-A responsive tribute page dedicated to **Dr. A. P. J. Abdul Kalam**, created as part of the **Oasis Infobyte Web Development & Design Internship**.
+A responsive and visually engaging tribute page dedicated to **Dr. A. P. J. Abdul Kalam**, one of India's most respected scientists, educators, and former Presidents.
 
-## Features
+This project was created as part of the **Oasis Infobyte Web Development & Design Internship (OIBSIP)**.
 
-- Modern hero section with an inspirational introduction
-- Introduction to Dr. A. P. J. Abdul Kalam
-- Timeline highlighting important milestones from his life
-- Inspirational quote section
-- Responsive design for desktop, tablet, and mobile screens
-- Clean card-based layout
-- Hover effects and modern visual styling
-- Self-contained design without external image dependencies
+## 🌟 Features
 
-## Technologies Used
+- Hero section with Dr. A. P. J. Abdul Kalam's name and tagline
+- Prominent image sourced from Wikimedia Commons
+- Biography section with original paraphrased content
+- Timeline highlighting important milestones
+- Distinctive quote section
+- Legacy section covering Science, Education, and Inspiration
+- Multiple background colours and visual sections
+- Google Fonts using Playfair Display and DM Sans
+- Hover effects and smooth scrolling
+- Fully responsive design for desktop, tablet, and mobile devices
+
+## 🛠️ Technologies Used
 
 - HTML5
 - CSS3
+- Google Fonts
+- Wikimedia Commons
 
-## Project Structure
+## 📂 Project Structure
 
 ```text
-WebDev-L2-TributePage/
+Tribute-Page/
+│
 ├── index.html
 ├── style.css
 └── README.md
 ```
 
-## How to Run
+## 📋 OIBSIP Task Requirements Covered
 
-1. Download or clone this repository.
-2. Open the `WebDev-L2-TributePage` folder.
-3. Open `index.html` in any modern web browser.
+- ✅ Page title with subject name and tagline
+- ✅ Prominent royalty-free/public-domain image
+- ✅ 3–4 paragraph biography
+- ✅ Timeline / key achievements section
+- ✅ Styled quote block
+- ✅ Multiple background colours
+- ✅ Multiple font styles
+- ✅ Responsive layout
 
-No server or additional installation is required.
+## 📚 Sources
 
-## Internship
+Factual information was researched using:
 
-**Organization:** Oasis Infobyte  
-**Track:** Web Development & Design  
-**Level:** Level 2  
-**Task:** Tribute Page
+- Wikipedia
+- Britannica
+
+The featured image is sourced from **Wikimedia Commons**.
+
+All written content on this page has been paraphrased and presented as original tribute content.
+
+## 👩‍💻 Internship
+
+**Program:** Oasis Infobyte Internship Program  
+**Domain:** Web Development & Design  
+**Task:** Task 2 — Tribute Page
+
+## 📌 Note
+
+This project was developed for educational and internship purposes as part of the OIBSIP Web Development & Design internship.

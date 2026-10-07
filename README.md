@@ -8,7 +8,7 @@ This repository contains my projects completed during the **Oasis Infobyte Inter
 A desktop BMI calculator built using Python and Tkinter.
 
 ### Task 3 — Random Password Generator
-A secure random password generator with customizable character types and password strength indication.
+A random password generator with customizable password length and character types.
 
 ### Task 5 — Chat Application
 A real-time multi-client chat application built using Python socket programming and threading.
@@ -60,5 +60,3 @@ OIBSIP/
 ## Author
 
 **Kiranmayi2003**
-
-#oasisinfobyte #oasisinfobytefamily #oibsip #internships

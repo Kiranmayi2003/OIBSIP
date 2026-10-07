@@ -1,31 +1,25 @@
+
 const taskInput = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
-const taskList = document.getElementById("taskList");
-const taskCount = document.getElementById("taskCount");
-const emptyState = document.getElementById("emptyState");
+
+const pendingList = document.getElementById("pendingList");
+const completedList = document.getElementById("completedList");
+
+const pendingCount = document.getElementById("pendingCount");
+const completedCount = document.getElementById("completedCount");
+
+const pendingEmpty = document.getElementById("pendingEmpty");
+const completedEmpty = document.getElementById("completedEmpty");
+
 const clearCompleted = document.getElementById("clearCompleted");
-const filters = document.querySelectorAll(".filter");
 
 let tasks = JSON.parse(localStorage.getItem("todoTasks")) || [];
-
-let currentFilter = "all";
-
-
-/* =========================
-   SAVE TASKS
-========================= */
 
 function saveTasks() {
     localStorage.setItem("todoTasks", JSON.stringify(tasks));
 }
 
-
-/* =========================
-   ADD TASK
-========================= */
-
 function addTask() {
-
     const text = taskInput.value.trim();
 
     if (text === "") {
@@ -37,7 +31,8 @@ function addTask() {
     const task = {
         id: Date.now(),
         text: text,
-        completed: false
+        completed: false,
+        createdAt: new Date().toLocaleString()
     };
 
     tasks.push(task);
@@ -45,19 +40,12 @@ function addTask() {
     saveTasks();
 
     taskInput.value = "";
-
     taskInput.focus();
 
     renderTasks();
 }
 
-
-/* =========================
-   DELETE TASK
-========================= */
-
 function deleteTask(id) {
-
     tasks = tasks.filter(task => task.id !== id);
 
     saveTasks();
@@ -65,17 +53,16 @@ function deleteTask(id) {
     renderTasks();
 }
 
-
-/* =========================
-   TOGGLE TASK
-========================= */
-
 function toggleTask(id) {
-
     tasks = tasks.map(task => {
-
         if (task.id === id) {
             task.completed = !task.completed;
+
+            if (task.completed) {
+                task.completedAt = new Date().toLocaleString();
+            } else {
+                delete task.completedAt;
+            }
         }
 
         return task;
@@ -86,181 +73,147 @@ function toggleTask(id) {
     renderTasks();
 }
 
+function editTask(id) {
+    const task = tasks.find(task => task.id === id);
 
-/* =========================
-   FILTER TASKS
-========================= */
-
-function getFilteredTasks() {
-
-    if (currentFilter === "active") {
-        return tasks.filter(task => !task.completed);
+    if (!task) {
+        return;
     }
 
-    if (currentFilter === "completed") {
-        return tasks.filter(task => task.completed);
+    const newText = prompt("Edit your task:", task.text);
+
+    if (newText === null) {
+        return;
     }
 
-    return tasks;
+    const updatedText = newText.trim();
+
+    if (updatedText === "") {
+        alert("Task cannot be empty.");
+        return;
+    }
+
+    task.text = updatedText;
+
+    saveTasks();
+
+    renderTasks();
 }
 
+function createTaskElement(task) {
+    const li = document.createElement("li");
 
-/* =========================
-   DISPLAY TASKS
-========================= */
+    li.className = "task";
 
-function renderTasks() {
+    if (task.completed) {
+        li.classList.add("completed");
+    }
 
-    taskList.innerHTML = "";
+    const checkbox = document.createElement("input");
 
-    const filteredTasks = getFilteredTasks();
+    checkbox.type = "checkbox";
+    checkbox.className = "task-checkbox";
+    checkbox.checked = task.completed;
 
-    filteredTasks.forEach(task => {
-
-        const li = document.createElement("li");
-
-        li.className = "task";
-
-        if (task.completed) {
-            li.classList.add("completed");
-        }
-
-
-        const checkbox = document.createElement("input");
-
-        checkbox.type = "checkbox";
-
-        checkbox.className = "task-checkbox";
-
-        checkbox.checked = task.completed;
-
-        checkbox.addEventListener("change", () => {
-            toggleTask(task.id);
-        });
-
-
-        const span = document.createElement("span");
-
-        span.className = "task-text";
-
-        span.textContent = task.text;
-
-
-        const deleteButton = document.createElement("button");
-
-        deleteButton.className = "delete-btn";
-
-        deleteButton.textContent = "×";
-
-        deleteButton.title = "Delete task";
-
-        deleteButton.addEventListener("click", () => {
-            deleteTask(task.id);
-        });
-
-
-        li.appendChild(checkbox);
-
-        li.appendChild(span);
-
-        li.appendChild(deleteButton);
-
-        taskList.appendChild(li);
+    checkbox.addEventListener("change", () => {
+        toggleTask(task.id);
     });
 
+    const content = document.createElement("div");
 
-    updateTaskCount();
+    content.className = "task-content";
 
-    updateEmptyState();
-}
+    const text = document.createElement("span");
 
+    text.className = "task-text";
+    text.textContent = task.text;
 
-/* =========================
-   TASK COUNT
-========================= */
+    const time = document.createElement("small");
 
-function updateTaskCount() {
+    time.className = "task-time";
 
-    const activeTasks = tasks.filter(
-        task => !task.completed
-    ).length;
-
-    taskCount.textContent = activeTasks;
-}
-
-
-/* =========================
-   EMPTY STATE
-========================= */
-
-function updateEmptyState() {
-
-    if (getFilteredTasks().length === 0) {
-        emptyState.style.display = "block";
+    if (task.completed && task.completedAt) {
+        time.textContent =
+            `Added: ${task.createdAt} • Completed: ${task.completedAt}`;
     } else {
-        emptyState.style.display = "none";
+        time.textContent =
+            `Added: ${task.createdAt}`;
     }
+
+    content.appendChild(text);
+    content.appendChild(time);
+
+    const actions = document.createElement("div");
+
+    actions.className = "task-actions";
+
+    const editButton = document.createElement("button");
+
+    editButton.className = "edit-btn";
+    editButton.textContent = "Edit";
+
+    editButton.addEventListener("click", () => {
+        editTask(task.id);
+    });
+
+    const deleteButton = document.createElement("button");
+
+    deleteButton.className = "delete-btn";
+    deleteButton.textContent = "Delete";
+
+    deleteButton.addEventListener("click", () => {
+        deleteTask(task.id);
+    });
+
+    actions.appendChild(editButton);
+    actions.appendChild(deleteButton);
+
+    li.appendChild(checkbox);
+    li.appendChild(content);
+    li.appendChild(actions);
+
+    return li;
 }
 
+function renderTasks() {
+    pendingList.innerHTML = "";
+    completedList.innerHTML = "";
 
-/* =========================
-   CLEAR COMPLETED
-========================= */
+    const pendingTasks = tasks.filter(task => !task.completed);
+    const completedTasks = tasks.filter(task => task.completed);
+
+    pendingTasks.forEach(task => {
+        pendingList.appendChild(createTaskElement(task));
+    });
+
+    completedTasks.forEach(task => {
+        completedList.appendChild(createTaskElement(task));
+    });
+
+    pendingCount.textContent = pendingTasks.length;
+    completedCount.textContent = completedTasks.length;
+
+    pendingEmpty.style.display =
+        pendingTasks.length === 0 ? "block" : "none";
+
+    completedEmpty.style.display =
+        completedTasks.length === 0 ? "block" : "none";
+}
 
 clearCompleted.addEventListener("click", () => {
-
-    tasks = tasks.filter(
-        task => !task.completed
-    );
+    tasks = tasks.filter(task => !task.completed);
 
     saveTasks();
 
     renderTasks();
 });
 
-
-/* =========================
-   FILTER BUTTONS
-========================= */
-
-filters.forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        filters.forEach(btn => {
-            btn.classList.remove("active");
-        });
-
-        button.classList.add("active");
-
-        currentFilter = button.dataset.filter;
-
-        renderTasks();
-    });
-});
-
-
-/* =========================
-   ADD BUTTON
-========================= */
-
 addBtn.addEventListener("click", addTask);
 
-
-/* =========================
-   ENTER KEY
-========================= */
-
-taskInput.addEventListener("keydown", (event) => {
-
+taskInput.addEventListener("keydown", event => {
     if (event.key === "Enter") {
         addTask();
     }
 });
-
-
-/* =========================
-   INITIAL DISPLAY
-========================= */
 
 renderTasks();

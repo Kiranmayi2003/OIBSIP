@@ -16,7 +16,6 @@
 
         <section class="auth-card">
 
-            <!-- Brand -->
             <div class="brand">
                 <div class="brand-icon">✓</div>
 
@@ -26,7 +25,6 @@
             </div>
 
 
-            <!-- Login Form -->
             <form id="loginForm">
 
                 <div class="form-group">
@@ -88,14 +86,12 @@
             </form>
 
 
-            <!-- Register -->
             <div class="register-section">
 
-                <p>
-                    Don't have an account?
-                </p>
+                <p>Don't have an account?</p>
 
                 <button
+                    type="button"
                     id="showRegister"
                     class="link-btn"
                 >
@@ -105,7 +101,6 @@
             </div>
 
 
-            <!-- Register Form -->
             <form
                 id="registerForm"
                 class="hidden"
@@ -115,9 +110,7 @@
 
                     <h2>Create Account</h2>
 
-                    <p>
-                        Register a new account
-                    </p>
+                    <p>Register a new account</p>
 
                 </div>
 
@@ -165,7 +158,7 @@
                         <input
                             type="password"
                             id="registerPassword"
-                            placeholder="Minimum 6 characters"
+                            placeholder="Minimum 8 characters and 1 number"
                             required
                         >
 
@@ -222,7 +215,6 @@
             </form>
 
 
-            <!-- Logged In -->
             <section
                 id="dashboard"
                 class="hidden dashboard"
@@ -232,13 +224,12 @@
                     ✓
                 </div>
 
-                <h2>
-                    Login Successful
-                </h2>
+                <h2>Login Successful</h2>
 
                 <p id="welcomeMessage"></p>
 
                 <button
+                    type="button"
                     id="logoutBtn"
                     class="logout-btn"
                 >

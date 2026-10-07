@@ -1,18 +1,24 @@
 # Calculator
 
-A browser-based calculator built as part of the **Oasis Infobyte Web Development & Design Internship**.
+A simple and responsive browser-based calculator built as part of the **Oasis Infobyte Web Development & Design Internship**.
+
+The calculator performs basic arithmetic operations using **HTML, CSS, and Vanilla JavaScript**, without using `eval()`.
 
 ## Features
 
-- Basic arithmetic operations: addition, subtraction, multiplication, and division
+- Perform addition, subtraction, multiplication, and division
 - Numeric buttons from 0–9
 - Decimal number support
 - Percentage calculation
-- Clear button
-- Backspace button
-- Result display
-- Error handling for invalid expressions
-- Clean and user-friendly interface
+- Backspace button to remove the last character
+- Clear button to reset the calculator
+- Sequential operator chaining
+- Division-by-zero error handling
+- Responsive and user-friendly button interface
+- CSS Grid for button layout
+- JavaScript event listeners for button interactions
+- No inline `onclick` attributes
+- No `eval()` function
 
 ## Technologies Used
 
@@ -24,6 +30,7 @@ A browser-based calculator built as part of the **Oasis Infobyte Web Development
 
 ```text
 WebDev-L2-Calculator/
+│
 ├── index.html
 ├── style.css
 ├── script.js
@@ -37,11 +44,26 @@ WebDev-L2-Calculator/
 3. Open `index.html` in a web browser.
 4. Use the calculator buttons to perform calculations.
 
-No server or additional installation is required.
+## Error Handling
+
+The calculator displays **"Error"** when an invalid calculation occurs, such as division by zero.
+
+## Learning Outcome
+
+This project helped me practice:
+
+- DOM manipulation
+- JavaScript event listeners
+- Conditional statements
+- Variables and functions
+- Basic arithmetic logic
+- CSS Grid layout
+- Building an interactive web application using Vanilla JavaScript
 
 ## Internship
 
-**Organization:** Oasis Infobyte  
-**Track:** Web Development & Design  
-**Level:** Level 2  
+**Oasis Infobyte – Web Development & Design Internship**
+
 **Task:** Calculator
+
+**Technology:** HTML5, CSS3, JavaScript

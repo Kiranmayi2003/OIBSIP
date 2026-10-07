@@ -9,7 +9,6 @@ The calculator performs basic arithmetic operations using **HTML, CSS, and Vanil
 - Perform addition, subtraction, multiplication, and division
 - Numeric buttons from 0–9
 - Decimal number support
-- Percentage calculation
 - Backspace button to remove the last character
 - Clear button to reset the calculator
 - Sequential operator chaining
